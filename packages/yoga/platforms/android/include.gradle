@@ -1,0 +1,8 @@
+dependencies {
+    /*
+     * https://yogalayout.com/getting-started/standalone
+     * https://github.com/facebook/yoga/tree/master/android
+     * https://mvnrepository.com/artifact/com.facebook.yoga.android/yoga-layout?repo=jcenter
+     */
+	compile 'com.facebook.yoga.android:yoga-layout:1.16.0'
+}

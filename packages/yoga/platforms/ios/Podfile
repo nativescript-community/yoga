@@ -1,0 +1,8 @@
+# https://github.com/CocoaPods/Specs/blob/master/Specs/9/4/7/YogaKit/1.18.1/YogaKit.podspec.json
+# Actually supports as low as 8.0, but NativeScript emits warnings if you target lower than the app itself.
+platform :ios, '10.0'
+
+# https://yogalayout.com/getting-started/standalone
+# https://github.com/facebook/yoga/tree/master/ios
+# https://cocoapods.org/pods/YogaKit
+pod 'YogaKit', '~> 1.18.1'
