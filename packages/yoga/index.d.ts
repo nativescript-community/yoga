@@ -1,3 +1,5 @@
 import { YogaCommon } from './common';
 
-export declare class Yoga extends YogaCommon {}
+export declare class Yoga extends YogaCommon {
+    hello(): void;
+}

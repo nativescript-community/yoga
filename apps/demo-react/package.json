@@ -1,5 +1,8 @@
 {
     "main": "app.js",
+    "scripts": {
+        "typings:ios": "TNS_TYPESCRIPT_DECLARATIONS_PATH=\"$(pwd)/app/typings\" tns build ios"
+    },
     "dependencies": {
         "@nativescript/core": "file:../../node_modules/@nativescript/core",
         "@nativescript-community/yoga": "file:../../dist/packages/yoga",

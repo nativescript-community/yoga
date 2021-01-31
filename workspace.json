@@ -140,6 +140,11 @@
 								"glob": "**/*",
 								"input": "packages/yoga/platforms/",
 								"output": "./platforms/"
+							},
+							{
+								"glob": "**/*",
+								"input": "packages/yoga/typings/",
+								"output": "./typings/"
 							}
 						]
 					}
