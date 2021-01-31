@@ -19,42 +19,42 @@ module.exports = {
 		},
 		// demos
 		apps: {
-			// '...Vanilla...': {
-			// 	script: `npx cowsay "Nothing wrong with vanilla 🍦"`,
-			// 	description: ` 🔻 Vanilla`,
-			// },
-			// demo: {
-			// 	clean: {
-			// 		script: 'nx run demo:clean',
-			// 		description: '⚆  Clean  🧹',
-			// 	},
-			// 	ios: {
-			// 		script: 'nx run demo:ios',
-			// 		description: '⚆  Run iOS  ',
-			// 	},
-			// 	android: {
-			// 		script: 'nx run demo:android',
-			// 		description: '⚆  Run Android  🤖',
-			// 	},
-			// },
-			// '...Angular...': {
-			// 	script: `npx cowsay "Test all the Angles!"`,
-			// 	description: ` 🔻 Angular`,
-			// },
-			// 'demo-angular': {
-			// 	clean: {
-			// 		script: 'nx run demo-angular:clean',
-			// 		description: '⚆  Clean  🧹',
-			// 	},
-			// 	ios: {
-			// 		script: 'nx run demo-angular:ios',
-			// 		description: '⚆  Run iOS  ',
-			// 	},
-			// 	android: {
-			// 		script: 'nx run demo-angular:android',
-			// 		description: '⚆  Run Android  🤖',
-			// 	},
-			// },
+			'...Vanilla...': {
+				script: `npx cowsay "Nothing wrong with vanilla 🍦"`,
+				description: ` 🔻 Vanilla`,
+			},
+			demo: {
+				clean: {
+					script: 'nx run demo:clean',
+					description: '⚆  Clean  🧹',
+				},
+				ios: {
+					script: 'nx run demo:ios',
+					description: '⚆  Run iOS  ',
+				},
+				android: {
+					script: 'nx run demo:android',
+					description: '⚆  Run Android  🤖',
+				},
+			},
+			'...Angular...': {
+				script: `npx cowsay "Test all the Angles!"`,
+				description: ` 🔻 Angular`,
+			},
+			'demo-angular': {
+				clean: {
+					script: 'nx run demo-angular:clean',
+					description: '⚆  Clean  🧹',
+				},
+				ios: {
+					script: 'nx run demo-angular:ios',
+					description: '⚆  Run iOS  ',
+				},
+				android: {
+					script: 'nx run demo-angular:android',
+					description: '⚆  Run Android  🤖',
+				},
+			},
 			'...React...': {
 				script: `npx cowsay "Test all the Reactions!"`,
 				description: ` 🔻 React`,
