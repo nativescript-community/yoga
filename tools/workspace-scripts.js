@@ -57,12 +57,12 @@ module.exports = {
 			},
 		},
 		'⚙️': {
-			script: `npx cowsay "@nativescript/* packages will keep your ⚙️ cranking"`,
-			description: '_____________  @nativescript/*  _____________',
+			script: `npx cowsay "@nativescript-community/* packages will keep your ⚙️ cranking"`,
+			description: '_____________  @nativescript-community/*  _____________',
 		},
 		// packages
 		// build output is always in dist/packages
-		'@nativescript': {
+		'@nativescript-community': {
 			'build-all': {
 				script: 'nx run all:build',
 				description: 'Build all packages',
