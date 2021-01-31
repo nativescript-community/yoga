@@ -2,6 +2,7 @@
     "main": "app.js",
     "dependencies": {
         "@nativescript/core": "file:../../node_modules/@nativescript/core",
+        "@nativescript-community/yoga": "file:../../dist/packages/yoga",
         "@react-navigation/core": "file:../../node_modules/@react-navigation/core",
         "react": "file:../../node_modules/react",
         "react-nativescript": "file:../../node_modules/react-nativescript",

@@ -63,6 +63,13 @@ module.exports = {
 		// packages
 		// build output is always in dist/packages
 		'@nativescript-community': {
+			// @nativescript-community/yoga
+			yoga: {
+				build: {
+					script: 'nx run yoga:build.all',
+					description: '@nativescript-community/yoga: Build',
+				},
+			},
 			'build-all': {
 				script: 'nx run all:build',
 				description: 'Build all packages',
@@ -73,10 +80,14 @@ module.exports = {
 			description: '_____________  Focus (VS Code supported)  _____________',
 		},
 		focus: {
+			yoga: {
+				script: 'nx run yoga:focus',
+				description: 'Focus on @nativescript-community/yoga',
+			},
 			reset: {
 				script: 'nx run all:focus',
 				description: 'Reset Focus',
-			}
+			},
 		},
 		'.....................': {
 			script: `npx cowsay "That's all for now folks ~"`,
