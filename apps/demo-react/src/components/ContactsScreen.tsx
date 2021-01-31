@@ -3,7 +3,7 @@ import { RouteProp } from '@react-navigation/core';
 import { FrameNavigationProp } from "react-nativescript-navigation";
 import { MainStackParamList } from "./NavigationParamList";
 import type { ItemEventData } from "@nativescript/core";
-import { ListView } from "react-nativescript";
+import { ListView, StyleSheet } from "react-nativescript";
 import { Dialogs } from "@nativescript/core";
 import { createStyleSheet } from "../util/createStyleSheet";
 
@@ -60,7 +60,7 @@ export function Contacts({ navigation }: ContactsScreenProps) {
     );
 }
 
-const styles = createStyleSheet({
+const styles = StyleSheet.create({
     label: {
         fontSize: 14,
         paddingLeft: 24,

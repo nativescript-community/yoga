@@ -1,6 +1,6 @@
 import * as React from "react";
 import { RouteProp } from '@react-navigation/core';
-import { ListView } from "react-nativescript";
+import { ListView, StyleSheet } from "react-nativescript";
 import { FrameNavigationProp } from "react-nativescript-navigation";
 import { MainStackParamList } from "./NavigationParamList";
 import type { ItemEventData } from "@nativescript/core";
@@ -44,7 +44,7 @@ export function Home({ navigation }: HomeScreenProps) {
     );
 }
 
-const styles = createStyleSheet({
+const styles = StyleSheet.create({
     label: {
         fontSize: 22,
         paddingLeft: 24,
