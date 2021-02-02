@@ -1,5 +1,4 @@
-import { YogaCommon } from './common';
+import type { Yoga$Node } from './entry-common';
 
-export declare class Yoga extends YogaCommon {
-    hello(): void;
+export declare class YogaNode extends Yoga$Node {
 }

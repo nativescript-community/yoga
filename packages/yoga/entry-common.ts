@@ -21,33 +21,36 @@ import type {
     Yoga$ExperimentalFeature,
 } from './YGEnums';
 
-class Layout {
-    left: number;
-    right: number;
-    top: number;
-    bottom: number;
-    width: number;
-    height: number;
-
-    constructor(left, right, top, bottom, width, height) {
-        this.left = left;
-        this.right = right;
-        this.top = top;
-        this.bottom = bottom;
-        this.width = width;
-        this.height = height;
+export class Layout {
+    constructor(
+        public left: number,
+        public right: number,
+        public top: number,
+        public bottom: number,
+        public width: number,
+        public height: number,
+    ) {
     }
 
-    fromJS(expose) {
-        expose(
-            this.left,
-            this.right,
-            this.top,
-            this.bottom,
-            this.width,
-            this.height,
-        );
-    }
+    // fromJS(
+    //     expose: (
+    //         left: number,
+    //         right: number,
+    //         top: number,
+    //         bottom: number,
+    //         width: number,
+    //         height: number
+    //     ) => void
+    // ): void {
+    //     expose(
+    //         this.left,
+    //         this.right,
+    //         this.top,
+    //         this.bottom,
+    //         this.width,
+    //         this.height,
+    //     );
+    // }
 
     toString() {
         return `<Layout#${this.left}:${this.right};${this.top}:${this.bottom};${
@@ -56,35 +59,30 @@ class Layout {
     }
 }
 
-class Size {
-    static fromJS({width, height}): Size {
+export class Size {
+    static fromJS({ width, height }: { width: number, height: number }): Size {
         return new Size(width, height);
     }
 
-    width: number;
-    height: number;
-
-    constructor(width, height) {
-        this.width = width;
-        this.height = height;
+    constructor(public width: number, public height: number) {
     }
 
-    fromJS(expose: (width: number, height: number) => void): void {
-        expose(this.width, this.height);
-    }
+    // fromJS(expose: (width: number, height: number) => void): void {
+    //     expose(this.width, this.height);
+    // }
 
     toString(): string {
         return `<Size#${this.width}x${this.height}>`;
     }
 }
 
-class Value {
+export class Value {
     constructor(public unit: number, public value: number) {
     }
 
-    fromJS(expose: (width: number, height: number) => void): void {
-        expose(this.unit, this.value);
-    }
+    // fromJS(expose: (width: number, height: number) => void): void {
+    //     expose(this.unit, this.value);
+    // }
 
     toString(): string {
         switch (this.unit) {
@@ -114,240 +112,244 @@ export type Yoga$Config = {
     setPointScaleFactor(factor: number): void,
 };
 
-export type Yoga$Node = {
-    calculateLayout(
+export abstract class Yoga$Node {
+    abstract calculateLayout(
         width?: number,
         height?: number,
         direction?: Yoga$Direction,
-    ): void,
-    copyStyle(node: Yoga$Node): void,
-    free(): void,
-    freeRecursive(): void,
-    getAlignContent(): Yoga$Align,
-    getAlignItems(): Yoga$Align,
-    getAlignSelf(): Yoga$Align,
-    getAspectRatio(): number,
-    getBorder(edge: Yoga$Edge): number,
-    getChild(index: number): Yoga$Node,
-    getChildCount(): number,
-    getComputedBorder(edge: Yoga$Edge): number,
-    getComputedBottom(): number,
-    getComputedHeight(): number,
-    getComputedLayout(): Layout,
-    getComputedLeft(): number,
-    getComputedMargin(edge: Yoga$Edge): number,
-    getComputedPadding(edge: Yoga$Edge): number,
-    getComputedRight(): number,
-    getComputedTop(): number,
-    getComputedWidth(): number,
-    getDisplay(): Yoga$Display,
-    getFlexBasis(): number,
-    getFlexDirection(): Yoga$FlexDirection,
-    getFlexGrow(): number,
-    getFlexShrink(): number,
-    getFlexWrap(): Yoga$FlexWrap,
-    getHeight(): Value,
-    getJustifyContent(): Yoga$JustifyContent,
-    getMargin(edge: Yoga$Edge): Value,
-    getMaxHeight(): Value,
-    getMaxWidth(): Value,
-    getMinHeight(): Value,
-    getMinWidth(): Value,
-    getOverflow(): Yoga$Overflow,
-    getPadding(edge: Yoga$Edge): Value,
-    getParent(): Yoga$Node|undefined,
-    getPosition(edge: Yoga$Edge): Value,
-    getPositionType(): Yoga$PositionType,
-    getWidth(): Value,
-    insertChild(child: Yoga$Node, index: number): void,
-    isDirty(): boolean,
-    markDirty(): void,
-    removeChild(child: Yoga$Node): void,
-    reset(): void,
-    setAlignContent(alignContent: Yoga$Align): void,
-    setAlignItems(alignItems: Yoga$Align): void,
-    setAlignSelf(alignSelf: Yoga$Align): void,
-    setAspectRatio(aspectRatio: number): void,
-    setBorder(edge: Yoga$Edge, borderWidth: number): void,
-    setDisplay(display: Yoga$Display): void,
-    setFlex(flex: number): void,
-    setFlexBasis(flexBasis: number | string): void,
-    setFlexBasisPercent(flexBasis: number): void,
-    setFlexDirection(flexDirection: Yoga$FlexDirection): void,
-    setFlexGrow(flexGrow: number): void,
-    setFlexShrink(flexShrink: number): void,
-    setFlexWrap(flexWrap: Yoga$FlexWrap): void,
-    setHeight(height: number | string): void,
-    setHeightAuto(): void,
-    setHeightPercent(height: number): void,
-    setJustifyContent(justifyContent: Yoga$JustifyContent): void,
-    setMargin(edge: Yoga$Edge, margin: number): void,
-    setMarginAuto(edge: Yoga$Edge): void,
-    setMarginPercent(edge: Yoga$Edge, margin: number): void,
-    setMaxHeight(maxHeight: number | string): void,
-    setMaxHeightPercent(maxHeight: number): void,
-    setMaxWidth(maxWidth: number | string): void,
-    setMaxWidthPercent(maxWidth: number): void,
-    setMeasureFunc(measureFunc: Function|undefined): void,
-    setMinHeight(minHeight: number | string): void,
-    setMinHeightPercent(minHeight: number): void,
-    setMinWidth(minWidth: number | string): void,
-    setMinWidthPercent(minWidth: number): void,
-    setOverflow(overflow: Yoga$Overflow): void,
-    setPadding(edge: Yoga$Edge, padding: number | string): void,
-    setPaddingPercent(edge: Yoga$Edge, padding: number): void,
-    setPosition(edge: Yoga$Edge, position: number | string): void,
-    setPositionPercent(edge: Yoga$Edge, position: number): void,
-    setPositionType(positionType: Yoga$PositionType): void,
-    setWidth(width: number | string): void,
-    setWidthAuto(): void,
-    setWidthPercent(width: number): void,
-    unsetMeasureFun(): void,
+    ): void;
+    abstract copyStyle(node: Yoga$Node): void;
+    abstract free(): void;
+    abstract freeRecursive(): void;
+    abstract getAlignContent(): Yoga$Align;
+    abstract getAlignItems(): Yoga$Align;
+    abstract getAlignSelf(): Yoga$Align;
+    abstract getAspectRatio(): number;
+    abstract getBorder(edge: Yoga$Edge): number;
+    abstract getChild(index: number): Yoga$Node;
+    abstract getChildCount(): number;
+    abstract getComputedBorder(edge: Yoga$Edge): number;
+    abstract getComputedBottom(): number;
+    abstract getComputedHeight(): number;
+    abstract getComputedLayout(): Layout;
+    abstract getComputedLeft(): number;
+    abstract getComputedMargin(edge: Yoga$Edge): number;
+    abstract getComputedPadding(edge: Yoga$Edge): number;
+    abstract getComputedRight(): number;
+    abstract getComputedTop(): number;
+    abstract getComputedWidth(): number;
+    abstract getDisplay(): Yoga$Display;
+    abstract getFlexBasis(): number;
+    abstract getFlexDirection(): Yoga$FlexDirection;
+    abstract getFlexGrow(): number;
+    abstract getFlexShrink(): number;
+    abstract getFlexWrap(): Yoga$FlexWrap;
+    abstract getHeight(): Value;
+    abstract getJustifyContent(): Yoga$JustifyContent;
+    abstract getMargin(edge: Yoga$Edge): Value;
+    abstract getMaxHeight(): Value;
+    abstract getMaxWidth(): Value;
+    abstract getMinHeight(): Value;
+    abstract getMinWidth(): Value;
+    abstract getOverflow(): Yoga$Overflow;
+    abstract getPadding(edge: Yoga$Edge): Value;
+    abstract getParent(): Yoga$Node|undefined;
+    abstract getPosition(edge: Yoga$Edge): Value;
+    abstract getPositionType(): Yoga$PositionType;
+    abstract getWidth(): Value;
+    abstract insertChild(child: Yoga$Node, index: number): void;
+    abstract isDirty(): boolean;
+    abstract markDirty(): void;
+    abstract removeChild(child: Yoga$Node): void;
+    abstract reset(): void;
+    abstract setAlignContent(alignContent: Yoga$Align): void;
+    abstract setAlignItems(alignItems: Yoga$Align): void;
+    abstract setAlignSelf(alignSelf: Yoga$Align): void;
+    abstract setAspectRatio(aspectRatio: number): void;
+    abstract setBorder(edge: Yoga$Edge, borderWidth: number): void;
+    abstract setDisplay(display: Yoga$Display): void;
+    abstract setFlex(flex: number): void;
+    abstract setFlexBasis(flexBasis: number | string): void;
+    abstract setFlexBasisPercent(flexBasis: number): void;
+    abstract setFlexDirection(flexDirection: Yoga$FlexDirection): void;
+    abstract setFlexGrow(flexGrow: number): void;
+    abstract setFlexShrink(flexShrink: number): void;
+    abstract setFlexWrap(flexWrap: Yoga$FlexWrap): void;
+    abstract setHeight(height: number | string): void;
+    abstract setHeightAuto(): void;
+    abstract setHeightPercent(height: number): void;
+    abstract setJustifyContent(justifyContent: Yoga$JustifyContent): void;
+    abstract setMargin(edge: Yoga$Edge, margin: number): void;
+    abstract setMarginAuto(edge: Yoga$Edge): void;
+    abstract setMarginPercent(edge: Yoga$Edge, margin: number): void;
+    abstract setMaxHeight(maxHeight: number | string): void;
+    abstract setMaxHeightPercent(maxHeight: number): void;
+    abstract setMaxWidth(maxWidth: number | string): void;
+    abstract setMaxWidthPercent(maxWidth: number): void;
+    abstract setMeasureFunc(measureFunc: Function|undefined): void;
+    abstract setMinHeight(minHeight: number | string): void;
+    abstract setMinHeightPercent(minHeight: number): void;
+    abstract setMinWidth(minWidth: number | string): void;
+    abstract setMinWidthPercent(minWidth: number): void;
+    abstract setOverflow(overflow: Yoga$Overflow): void;
+    abstract setPadding(edge: Yoga$Edge, padding: number | string): void;
+    abstract setPaddingPercent(edge: Yoga$Edge, padding: number): void;
+    abstract setPosition(edge: Yoga$Edge, position: number | string): void;
+    abstract setPositionPercent(edge: Yoga$Edge, position: number): void;
+    abstract setPositionType(positionType: Yoga$PositionType): void;
+    abstract setWidth(width: number | string): void;
+    abstract setWidthAuto(): void;
+    abstract setWidthPercent(width: number): void;
+    abstract unsetMeasureFun(): void;
 };
 
-type TypeofConstants = typeof CONSTANTS;
-interface Yoga extends TypeofConstants {
-    Config: {
-        create(): Yoga$Config,
-        destroy(config: Yoga$Config): any,
-    },
-    Node: {
-        create(): Yoga$Node,
-        createDefault(): Yoga$Node,
-        createWithConfig(config: Yoga$Config): Yoga$Node,
-        destroy(node: Yoga$Node): any,
-    },
-    Layout: Layout,
-    Size: Size,
-    Value: Value,
+export default {
+    // Config,
+    // Node,
+    Layout,
+    Size,
+    Value,
+    ...CONSTANTS,
     /** 
      * In this commit, getInstanceCount was removed from the implementation yet accidentally left in the typings.
      * @see https://github.com/facebook/yoga/commit/adff8d96dd8c0264202c34672c6dee8c0925445c#diff-c925400af6d5dc4ea64acb5bb45e54b953850abdb977708281f0f0fbff9a15a5
      */
     // getInstanceCount(): number,
-}
-
-export default (bind: any, lib: any): Yoga => {
-    function patch(prototype: any, name: string, fn: (...args: any[]) => any): void {
-        const original: (...args: any[]) => any = prototype[name];
-
-        prototype[name] = function(...args: any[]): any {
-            return fn.call(this, original, ...args);
-        };
-    }
-
-    for (let fnName of [
-        'setPosition',
-        'setMargin',
-        'setFlexBasis',
-        'setWidth',
-        'setHeight',
-        'setMinWidth',
-        'setMinHeight',
-        'setMaxWidth',
-        'setMaxHeight',
-        'setPadding',
-    ]) {
-        const methods = {
-            [CONSTANTS.UNIT_POINT]: lib.Node.prototype[fnName],
-            [CONSTANTS.UNIT_PERCENT]: lib.Node.prototype[`${fnName}Percent`],
-            [CONSTANTS.UNIT_AUTO]: lib.Node.prototype[`${fnName}Auto`],
-        };
-
-        patch(lib.Node.prototype, fnName, function(original: any, ...args: any[]) {
-            // We patch all these functions to add support for the following calls:
-            // .setWidth(100) / .setWidth("100%") / .setWidth(.getWidth()) / .setWidth("auto")
-
-            const value: any = args.pop();
-            let unit: number, asNumber: number|undefined;
-
-            if (value === 'auto') {
-                unit = CONSTANTS.UNIT_AUTO;
-                asNumber = undefined;
-            } else if (value instanceof Value) {
-                unit = value.unit;
-                asNumber = value.valueOf();
-            } else {
-                unit =
-                    typeof value === 'string' && value.endsWith('%')
-                        ? CONSTANTS.UNIT_PERCENT
-                        : CONSTANTS.UNIT_POINT;
-                asNumber = parseFloat(value);
-                if (!Number.isNaN(value) && Number.isNaN(asNumber)) {
-                    throw new Error(`Invalid value ${value} for ${fnName}`);
-                }
-            }
-
-            if (!methods[unit])
-                throw new Error(
-                    `Failed to execute "${fnName}": Unsupported unit '${value}'`,
-                );
-
-            if (asNumber !== undefined) {
-                return methods[unit].call(this, ...args, asNumber);
-            } else {
-                return methods[unit].call(this, ...args);
-            }
-        });
-    }
-
-    patch(lib.Config.prototype, 'free', function() {
-        // Since we handle the memory allocation ourselves (via lib.Config.create),
-        // we also need to handle the deallocation
-        lib.Config.destroy(this);
-    });
-
-    patch(lib.Node, 'create', function(_, config) {
-        // We decide the constructor we want to call depending on the parameters
-        return config
-            ? lib.Node.createWithConfig(config)
-            : lib.Node.createDefault();
-    });
-
-    patch(lib.Node.prototype, 'free', function() {
-        // Since we handle the memory allocation ourselves (via lib.Node.create),
-        // we also need to handle the deallocation
-        lib.Node.destroy(this);
-    });
-
-    patch(lib.Node.prototype, 'freeRecursive', function() {
-        for (let t = 0, T = this.getChildCount(); t < T; ++t) {
-            this.getChild(0).freeRecursive();
-        }
-        this.free();
-    });
-
-    patch(lib.Node.prototype, 'setMeasureFunc', function(original, measureFunc) {
-        // This patch is just a convenience patch, since it helps write more
-        // idiomatic source code (such as .setMeasureFunc(null))
-        // We also automatically convert the return value of the measureFunc
-        // to a Size object, so that we can return anything that has .width and
-        // .height properties
-        if (measureFunc) {
-            return original.call(this, (...args: any[]) =>
-                Size.fromJS(measureFunc(...args)),
-            );
-        } else {
-            return this.unsetMeasureFunc();
-        }
-    });
-
-    patch(lib.Node.prototype, 'calculateLayout', function(
-        original,
-        width = NaN,
-        height = NaN,
-        direction = CONSTANTS.DIRECTION_LTR,
-    ) {
-        // Just a small patch to add support for the function default parameters
-        return original.call(this, width, height, direction);
-    });
-
-    return {
-        Config: lib.Config,
-        Node: lib.Node,
-        Layout: bind('Layout', Layout),
-        Size: bind('Size', Size),
-        Value: bind('Value', Value),
-        ...CONSTANTS,
-    };
 };
+
+// type TypeofConstants = typeof CONSTANTS;
+// interface Yoga extends TypeofConstants {
+//     Layout: Layout,
+//     Size: Size,
+//     Value: Value,
+//     /** 
+//      * In this commit, getInstanceCount was removed from the implementation yet accidentally left in the typings.
+//      * @see https://github.com/facebook/yoga/commit/adff8d96dd8c0264202c34672c6dee8c0925445c#diff-c925400af6d5dc4ea64acb5bb45e54b953850abdb977708281f0f0fbff9a15a5
+//      */
+//     // getInstanceCount(): number,
+// }
+
+// const x = (bind: any, lib: any): Yoga => {
+//     function patch(prototype: any, name: string, fn: (...args: any[]) => any): void {
+//         const original: (...args: any[]) => any = prototype[name];
+
+//         prototype[name] = function(...args: any[]): any {
+//             return fn.call(this, original, ...args);
+//         };
+//     }
+
+//     for (let fnName of [
+//         'setPosition',
+//         'setMargin',
+//         'setFlexBasis',
+//         'setWidth',
+//         'setHeight',
+//         'setMinWidth',
+//         'setMinHeight',
+//         'setMaxWidth',
+//         'setMaxHeight',
+//         'setPadding',
+//     ]) {
+//         const methods = {
+//             [CONSTANTS.UNIT_POINT]: lib.Node.prototype[fnName],
+//             [CONSTANTS.UNIT_PERCENT]: lib.Node.prototype[`${fnName}Percent`],
+//             [CONSTANTS.UNIT_AUTO]: lib.Node.prototype[`${fnName}Auto`],
+//         };
+
+//         patch(lib.Node.prototype, fnName, function(original: any, ...args: any[]) {
+//             // We patch all these functions to add support for the following calls:
+//             // .setWidth(100) / .setWidth("100%") / .setWidth(.getWidth()) / .setWidth("auto")
+
+//             const value: any = args.pop();
+//             let unit: number, asNumber: number|undefined;
+
+//             if (value === 'auto') {
+//                 unit = CONSTANTS.UNIT_AUTO;
+//                 asNumber = undefined;
+//             } else if (value instanceof Value) {
+//                 unit = value.unit;
+//                 asNumber = value.valueOf();
+//             } else {
+//                 unit =
+//                     typeof value === 'string' && value.endsWith('%')
+//                         ? CONSTANTS.UNIT_PERCENT
+//                         : CONSTANTS.UNIT_POINT;
+//                 asNumber = parseFloat(value);
+//                 if (!Number.isNaN(value) && Number.isNaN(asNumber)) {
+//                     throw new Error(`Invalid value ${value} for ${fnName}`);
+//                 }
+//             }
+
+//             if (!methods[unit])
+//                 throw new Error(
+//                     `Failed to execute "${fnName}": Unsupported unit '${value}'`,
+//                 );
+
+//             if (asNumber !== undefined) {
+//                 return methods[unit].call(this, ...args, asNumber);
+//             } else {
+//                 return methods[unit].call(this, ...args);
+//             }
+//         });
+//     }
+
+//     patch(lib.Config.prototype, 'free', function() {
+//         // Since we handle the memory allocation ourselves (via lib.Config.create),
+//         // we also need to handle the deallocation
+//         lib.Config.destroy(this);
+//     });
+
+//     patch(lib.Node, 'create', function(_, config) {
+//         // We decide the constructor we want to call depending on the parameters
+//         return config
+//             ? lib.Node.createWithConfig(config)
+//             : lib.Node.createDefault();
+//     });
+
+//     patch(lib.Node.prototype, 'free', function() {
+//         // Since we handle the memory allocation ourselves (via lib.Node.create),
+//         // we also need to handle the deallocation
+//         lib.Node.destroy(this);
+//     });
+
+//     patch(lib.Node.prototype, 'freeRecursive', function() {
+//         for (let t = 0, T = this.getChildCount(); t < T; ++t) {
+//             this.getChild(0).freeRecursive();
+//         }
+//         this.free();
+//     });
+
+//     patch(lib.Node.prototype, 'setMeasureFunc', function(original, measureFunc) {
+//         // This patch is just a convenience patch, since it helps write more
+//         // idiomatic source code (such as .setMeasureFunc(null))
+//         // We also automatically convert the return value of the measureFunc
+//         // to a Size object, so that we can return anything that has .width and
+//         // .height properties
+//         if (measureFunc) {
+//             return original.call(this, (...args: any[]) =>
+//                 Size.fromJS(measureFunc(...args)),
+//             );
+//         } else {
+//             return this.unsetMeasureFunc();
+//         }
+//     });
+
+//     patch(lib.Node.prototype, 'calculateLayout', function(
+//         original,
+//         width = NaN,
+//         height = NaN,
+//         direction = CONSTANTS.DIRECTION_LTR,
+//     ) {
+//         // Just a small patch to add support for the function default parameters
+//         return original.call(this, width, height, direction);
+//     });
+
+//     return {
+//         Config: lib.Config,
+//         Node: lib.Node,
+//         Layout: bind('Layout', Layout),
+//         Size: bind('Size', Size),
+//         Value: bind('Value', Value),
+//         ...CONSTANTS,
+//     };
+// };
