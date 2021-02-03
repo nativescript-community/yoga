@@ -6,12 +6,17 @@ import type { Yoga$Direction, Yoga$Align, Yoga$Edge, Yoga$Display, Yoga$FlexDire
 import CONSTANTS from './YGEnums';
 
 export class YogaNode extends Yoga$Node {
+    /*
+     * There is a globalConfig that is auto-initialised by the Obj-C runtime, so we don't need do anything with it ourselves.
+     * @see https://stackoverflow.com/questions/13326435/nsobject-load-and-initialize-what-do-they-do
+     */
+
     /**
      * Provisional solution for getting a reference to the YogaNode instance that owns the YGLayout native object.
      * I'm still trying to understand the end-to-end picture for the memory management lifecycle.
      */
     private static readonly nativeToOwners = new WeakMap<YGLayout, YogaNode>();
-    private static readonly notExposedMsg: string = "Method not implemented, as Yoga does not expose it to Obj-C.";
+    private static readonly notExposedMsg: string = "Method not implemented, as the Yoga Obj-C library does not implement it.";
     public readonly native: YGLayout = YGLayout.alloc().init();
 
     constructor(){

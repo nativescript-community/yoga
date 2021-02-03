@@ -5,6 +5,9 @@ import { Value, Layout, Size } from './entry-common';
 import { Yoga$Direction, Yoga$Align, Yoga$Edge, Yoga$Display, Yoga$FlexDirection, Yoga$JustifyContent } from './YGEnums';
 
 export class YogaNode extends Yoga$Node {
+    // TODO
+    public readonly native: any = null;
+
     calculateLayout(width?: number, height?: number, direction?: Yoga$Direction): void {
         throw new Error('Method not implemented.');
     }
