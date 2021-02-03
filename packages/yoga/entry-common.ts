@@ -7,7 +7,7 @@
  * @format
  */
 
-import CONSTANTS from "./YGEnums";
+import CONSTANTS, { Yoga$Unit } from "./YGEnums";
 import type {
     Yoga$Edge,
     Yoga$FlexWrap,
@@ -77,7 +77,13 @@ export class Size {
 }
 
 export class Value {
-    constructor(public unit: number, public value: number) {
+    constructor(
+        public unit: Yoga$Unit,
+        /**
+         * May be undefined in the case of UNIT_AUTO.
+         */
+        public value: number|undefined,
+    ) {
     }
 
     // fromJS(expose: (width: number, height: number) => void): void {
@@ -98,7 +104,7 @@ export class Value {
         }
     }
 
-    valueOf(): number {
+    valueOf(): number|undefined {
         return this.value;
     }
 }

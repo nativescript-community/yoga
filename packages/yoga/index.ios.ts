@@ -1,9 +1,9 @@
 /// <reference path="./typings/objc!yoga.d.ts" />
 /// <reference path="./typings/objc!YogaKit.d.ts" />
 
-import { Yoga$Node } from './entry-common';
-import { Value, Layout, Size } from './entry-common';
-import { Yoga$Direction, Yoga$Align, Yoga$Edge, Yoga$Display, Yoga$FlexDirection, Yoga$JustifyContent } from './YGEnums';
+import { Yoga$Node, Value, Layout } from './entry-common';
+import type { Yoga$Direction, Yoga$Align, Yoga$Edge, Yoga$Display, Yoga$FlexDirection, Yoga$JustifyContent, Yoga$Unit } from './YGEnums';
+import CONSTANTS from './YGEnums';
 
 export class YogaNode extends Yoga$Node {
     // FIXME: Should this be a weak ref instead? That said, it's not a delegate.
@@ -46,43 +46,33 @@ export class YogaNode extends Yoga$Node {
         return YGNodeGetChildCount(this.native as any);
     }
     getComputedBorder(edge: Yoga$Edge): number {
-        // return this.native.computedBorder;
         throw new Error(YogaNode.notExposedMsg);
     }
     getComputedBottom(): number {
-        // return this.native.computedBottom;
         throw new Error(YogaNode.notExposedMsg);
     }
     getComputedHeight(): number {
-        // return this.native.computedHeight;
         throw new Error(YogaNode.notExposedMsg);
     }
     getComputedLayout(): Layout {
-        // return this.native.computedLayout;
         throw new Error(YogaNode.notExposedMsg);
     }
     getComputedLeft(): number {
-        // return this.native.computedLeft;
         throw new Error(YogaNode.notExposedMsg);
     }
     getComputedMargin(edge: Yoga$Edge): number {
-        // return this.native.computedMargin;
         throw new Error(YogaNode.notExposedMsg);
     }
     getComputedPadding(edge: Yoga$Edge): number {
-        // return this.native.computedPadding;
         throw new Error(YogaNode.notExposedMsg);
     }
     getComputedRight(): number {
-        // return this.native.computedRight;
         throw new Error(YogaNode.notExposedMsg);
     }
     getComputedTop(): number {
-        // return this.native.computedTop;
         throw new Error(YogaNode.notExposedMsg);
     }
     getComputedWidth(): number {
-        // return this.native.computedWidth;
         throw new Error(YogaNode.notExposedMsg);
     }
     getDisplay(): Yoga$Display {
@@ -189,8 +179,20 @@ export class YogaNode extends Yoga$Node {
         YGNodeStyleSetFlex(this.native as any, flex);
     }
     setFlexBasis(flexBasis: string | number): void {
-        // FIXME
-        YGNodeStyleSetFlexBasis(this.native as any, flexBasis);
+        const value: Value = this.parseValue(flexBasis);
+        switch(value.unit){
+            case CONSTANTS.UNIT_AUTO:
+                YGNodeStyleSetFlexBasisAuto(this.native as any);
+                break;
+            case CONSTANTS.UNIT_PERCENT:
+                YGNodeStyleSetFlexBasisPercent(this.native as any, value.value);
+                break;
+            case CONSTANTS.UNIT_POINT:
+                YGNodeStyleSetFlexBasis(this.native as any, value.value);
+                break;
+            default:
+                throw new Error(`Invalid unit for setFlexBasis, ${value.unit}.`);
+        }
     }
     setFlexBasisPercent(flexBasis: number): void {
         YGNodeStyleSetFlexBasisPercent(this.native as any, flexBasis);
@@ -208,7 +210,20 @@ export class YogaNode extends Yoga$Node {
         YGNodeStyleSetFlexWrap(this.native as any, flexWrap);
     }
     setHeight(height: string | number): void {
-        YGNodeStyleSetHeight(this.native as any, height);
+        const value: Value = this.parseValue(height);
+        switch(value.unit){
+            case CONSTANTS.UNIT_AUTO:
+                YGNodeStyleSetHeightAuto(this.native as any);
+                break;
+            case CONSTANTS.UNIT_PERCENT:
+                YGNodeStyleSetHeightPercent(this.native as any, value.value);
+                break;
+            case CONSTANTS.UNIT_POINT:
+                YGNodeStyleSetHeight(this.native as any, value.value);
+                break;
+            default:
+                throw new Error(`Invalid unit for setHeight, ${value.unit}.`);
+        }
     }
     setHeightAuto(): void {
         YGNodeStyleSetHeightAuto(this.native as any);
@@ -229,31 +244,68 @@ export class YogaNode extends Yoga$Node {
         YGNodeStyleSetMarginPercent(this.native as any, edge, margin);
     }
     setMaxHeight(maxHeight: string | number): void {
-        // FIXME
-        YGNodeStyleSetMaxHeight(this.native as any, maxHeight);
+        const value: Value = this.parseValue(maxHeight);
+        switch(value.unit){
+            case CONSTANTS.UNIT_PERCENT:
+                YGNodeStyleSetMaxHeightPercent(this.native as any, value.value);
+                break;
+            case CONSTANTS.UNIT_POINT:
+                YGNodeStyleSetMaxHeight(this.native as any, value.value);
+                break;
+            default:
+                throw new Error(`Invalid unit for setMaxHeight, ${value.unit}.`);
+        }
     }
     setMaxHeightPercent(maxHeight: number): void {
         YGNodeStyleSetMaxHeightPercent(this.native as any, maxHeight);
     }
     setMaxWidth(maxWidth: string | number): void {
-        // FIXME
-        YGNodeStyleSetMaxWidth(this.native as any, maxWidth);
+        const value: Value = this.parseValue(maxWidth);
+        switch(value.unit){
+            case CONSTANTS.UNIT_PERCENT:
+                YGNodeStyleSetMaxWidthPercent(this.native as any, value.value);
+                break;
+            case CONSTANTS.UNIT_POINT:
+                YGNodeStyleSetMaxWidth(this.native as any, value.value);
+                break;
+            default:
+                throw new Error(`Invalid unit for setMaxWidth, ${value.unit}.`);
+        }
     }
     setMaxWidthPercent(maxWidth: number): void {
         YGNodeStyleSetMaxWidthPercent(this.native as any, maxWidth);
     }
-    setMeasureFunc(measureFunc: Function): void {
-        // YGNodeStyleSetMeasureFunc(this.native as any, measureFunc);
-        throw new Error("Not yet implemented");
+    setMeasureFunc(measureFunc: interop.FunctionReference<(p1: interop.Pointer | interop.Reference<any>, p2: number, p3: YGMeasureMode, p4: number, p5: YGMeasureMode) => YGSize>): void {
+        YGNodeSetMeasureFunc(this.native as any, measureFunc);
     }
     setMinHeight(minHeight: string | number): void {
-        YGNodeStyleSetMinHeight(this.native as any, minHeight);
+        const value: Value = this.parseValue(minHeight);
+        switch(value.unit){
+            case CONSTANTS.UNIT_PERCENT:
+                YGNodeStyleSetMinHeightPercent(this.native as any, value.value);
+                break;
+            case CONSTANTS.UNIT_POINT:
+                YGNodeStyleSetMinHeight(this.native as any, value.value);
+                break;
+            default:
+                throw new Error(`Invalid unit for setMinHeight, ${value.unit}.`);
+        }
     }
     setMinHeightPercent(minHeight: number): void {
         YGNodeStyleSetMinHeightPercent(this.native as any, minHeight);
     }
     setMinWidth(minWidth: string | number): void {
-        YGNodeStyleSetMinWidth(this.native as any, minWidth);
+        const value: Value = this.parseValue(minWidth);
+        switch(value.unit){
+            case CONSTANTS.UNIT_PERCENT:
+                YGNodeStyleSetMinWidthPercent(this.native as any, value.value);
+                break;
+            case CONSTANTS.UNIT_POINT:
+                YGNodeStyleSetMinWidth(this.native as any, value.value);
+                break;
+            default:
+                throw new Error(`Invalid unit for setMinWidth, ${value.unit}.`);
+        }
     }
     setMinWidthPercent(minWidth: number): void {
         YGNodeStyleSetMinWidthPercent(this.native as any, minWidth);
@@ -262,27 +314,89 @@ export class YogaNode extends Yoga$Node {
         YGNodeStyleSetOverflow(this.native as any, overflow);
     }
     setPadding(edge: Yoga$Edge, padding: string | number): void {
-        // FIXME
-        YGNodeStyleSetPadding(this.native as any, edge, padding);
+        const value: Value = this.parseValue(padding);
+        switch(value.unit){
+            case CONSTANTS.UNIT_PERCENT:
+                YGNodeStyleSetPaddingPercent(this.native as any, edge, value.value);
+                break;
+            case CONSTANTS.UNIT_POINT:
+                YGNodeStyleSetPadding(this.native as any, edge, value.value);
+                break;
+            default:
+                throw new Error(`Invalid unit for setPadding, ${value.unit}.`);
+        }
     }
     setPaddingPercent(edge: Yoga$Edge, padding: number): void {
-        // FIXME
         YGNodeStyleSetPaddingPercent(this.native as any, edge, padding);
     }
     setPosition(edge: Yoga$Edge, position: string | number): void {
-        // FIXME
-        YGNodeStyleSetPosition(this.native as any, edge, position);
+        if(position === "absolute"){
+            YGNodeStyleSetPositionType(this.native as any, YGPositionType.Absolute);
+            return;
+        }
+
+        if(position === "relative"){
+            YGNodeStyleSetPositionType(this.native as any, YGPositionType.Relative);
+            return;
+        }
+
+        const value: Value = this.parseValue(position);
+        switch(value.unit){
+            case CONSTANTS.UNIT_PERCENT:
+                YGNodeStyleSetPositionPercent(this.native as any, edge, value.value);
+                break;
+            case CONSTANTS.UNIT_POINT:
+                YGNodeStyleSetPosition(this.native as any, edge, value.value);
+                break;
+            default:
+                // It's impossible to get UNIT_UNDEFINED because parseValue would have thrown by then.
+                throw new Error(`Invalid unit for setPosition, ${value.unit}.`);
+        }
     }
     setPositionPercent(edge: Yoga$Edge, position: number): void {
-        // FIXME
         YGNodeStyleSetPositionPercent(this.native as any, edge, position);
     }
     setPositionType(positionType: Yoga$Display): void {
         YGNodeStyleSetPositionType(this.native as any, positionType);
     }
+    private parseValue(value: string|number|Value): Value {
+        let unit: Yoga$Unit; 
+        let asNumber: number|undefined;
+
+        if (value === "auto") {
+            unit = CONSTANTS.UNIT_AUTO;
+            asNumber = undefined;
+        } else if (value instanceof Value) {
+            unit = value.unit;
+            asNumber = value.valueOf();
+        } else {
+            unit =
+                typeof value === "string" && value.endsWith("%")
+                    ? CONSTANTS.UNIT_PERCENT
+                    : CONSTANTS.UNIT_POINT;
+            asNumber = parseFloat(value as string);
+            if (!Number.isNaN(value) && Number.isNaN(asNumber)) {
+                throw new Error(`Invalid value ${value}.`);
+            }
+        }
+
+        return new Value(unit, asNumber);
+    }
     setWidth(width: string | number): void {
-        // FIXME
-        YGNodeStyleSetWidth(this.native as any, width);
+        const value: Value = this.parseValue(width);
+        switch(value.unit){
+            case CONSTANTS.UNIT_AUTO:
+                YGNodeStyleSetWidthAuto(this.native as any);
+                break;
+            case CONSTANTS.UNIT_PERCENT:
+                YGNodeStyleSetWidthPercent(this.native as any, value.value);
+                break;
+            case CONSTANTS.UNIT_POINT:
+                YGNodeStyleSetWidth(this.native as any, value.value);
+                break;
+            default:
+                throw new Error(`Invalid unit for setWidth, ${value.unit}.`);
+        }
     }
     setWidthAuto(): void {
         YGNodeStyleSetWidthAuto(this.native as any);
@@ -291,6 +405,6 @@ export class YogaNode extends Yoga$Node {
         YGNodeStyleSetWidthPercent(this.native as any, width);
     }
     unsetMeasureFun(): void {
-        throw new Error('Method not implemented.');
+        YGNodeSetMeasureFunc(this.native as any, null);
     }
 }
