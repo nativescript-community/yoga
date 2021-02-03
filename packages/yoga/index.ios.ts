@@ -6,10 +6,13 @@ import type { Yoga$Direction, Yoga$Align, Yoga$Edge, Yoga$Display, Yoga$FlexDire
 import CONSTANTS from './YGEnums';
 
 export class YogaNode extends Yoga$Node {
-    // FIXME: Should this be a weak ref instead? That said, it's not a delegate.
-    // Could adorn it with a weak ref to the YogaNode class that owns it, though...
     public readonly native: YGLayout = YGLayout.alloc().init();
     private static readonly notExposedMsg: string = "Method not implemented, as Yoga does not expose it to Obj-C.";
+    constructor(){
+        super();
+
+        (this.native as any).owner = this;
+    }
 
     calculateLayout(width?: number, height?: number, direction?: Yoga$Direction): void {
         YGNodeCalculateLayout(this.native as any, width, height, direction);
@@ -38,9 +41,16 @@ export class YogaNode extends Yoga$Node {
     getBorder(edge: Yoga$Edge): number {
         return YGNodeStyleGetBorder(this.native as any, edge);
     }
-    getChild(index: number): YogaNode {
-        // FIXME: return a YogaNode rather than a YGNode
-        return YGNodeGetChild(this.native as any, index) as any;
+    getChild(index: number): YogaNode|undefined|null {
+        const nativeChild: YGLayout|undefined|null = YGNodeGetChild(this.native as any, index) as unknown as YGLayout|undefined|null;
+        if(!nativeChild){
+            return nativeChild as undefined|null;
+        }
+        /*
+         * Alternatively, we could let the YogaNode keep track of its children itself, rather than asking YogaNode.native.
+         * However, YogaNode.native is ultimately the source of truth.
+         */
+        return (nativeChild as any).owner;
     }
     getChildCount(): number {
         return YGNodeGetChildCount(this.native as any);
@@ -127,9 +137,16 @@ export class YogaNode extends Yoga$Node {
         const padding = this.native.padding;
         return new Value(padding.unit, padding.value);
     }
-    getParent(): YogaNode {
-        // FIXME: return a YogaNode rather than a YGNode
-        return YGNodeGetParent(this.native as any) as any;
+    getParent(): YogaNode|undefined|null {
+        const nativeParent: YGLayout|undefined|null = YGNodeGetParent(this.native as any) as unknown as YGLayout|undefined|null;
+        if(!nativeParent){
+            return nativeParent as undefined|null;
+        }
+        /*
+         * Alternatively, we could let the YogaNode keep track of its parentage itself, rather than asking YogaNode.native.
+         * However, YogaNode.native is ultimately the source of truth.
+         */
+        return (nativeParent as any).owner;
     }
     getPosition(edge: Yoga$Edge): Value {
         const value: YGValue = YGNodeStyleGetPosition(this.native as any, edge);
@@ -359,29 +376,6 @@ export class YogaNode extends Yoga$Node {
     setPositionType(positionType: Yoga$Display): void {
         YGNodeStyleSetPositionType(this.native as any, positionType);
     }
-    private parseValue(value: string|number|Value): Value {
-        let unit: Yoga$Unit; 
-        let asNumber: number|undefined;
-
-        if (value === "auto") {
-            unit = CONSTANTS.UNIT_AUTO;
-            asNumber = undefined;
-        } else if (value instanceof Value) {
-            unit = value.unit;
-            asNumber = value.valueOf();
-        } else {
-            unit =
-                typeof value === "string" && value.endsWith("%")
-                    ? CONSTANTS.UNIT_PERCENT
-                    : CONSTANTS.UNIT_POINT;
-            asNumber = parseFloat(value as string);
-            if (!Number.isNaN(value) && Number.isNaN(asNumber)) {
-                throw new Error(`Invalid value ${value}.`);
-            }
-        }
-
-        return new Value(unit, asNumber);
-    }
     setWidth(width: string | number): void {
         const value: Value = this.parseValue(width);
         switch(value.unit){
@@ -406,5 +400,28 @@ export class YogaNode extends Yoga$Node {
     }
     unsetMeasureFun(): void {
         YGNodeSetMeasureFunc(this.native as any, null);
+    }
+    private parseValue(value: string|number|Value): Value {
+        let unit: Yoga$Unit; 
+        let asNumber: number|undefined;
+
+        if (value === "auto") {
+            unit = CONSTANTS.UNIT_AUTO;
+            asNumber = undefined;
+        } else if (value instanceof Value) {
+            unit = value.unit;
+            asNumber = value.valueOf();
+        } else {
+            unit =
+                typeof value === "string" && value.endsWith("%")
+                    ? CONSTANTS.UNIT_PERCENT
+                    : CONSTANTS.UNIT_POINT;
+            asNumber = parseFloat(value as string);
+            if (!Number.isNaN(value) && Number.isNaN(asNumber)) {
+                throw new Error(`Invalid value ${value}.`);
+            }
+        }
+
+        return new Value(unit, asNumber);
     }
 }
