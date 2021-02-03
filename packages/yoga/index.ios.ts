@@ -113,7 +113,7 @@ export class YogaNode extends Yoga$Node {
         return this.native.justifyContent;
     }
     getMargin(edge: Yoga$Edge): Value {
-        const value = this.native.margin;
+        const value = YGNodeStyleGetMargin(this.native as any, edge);
         return new Value(value.unit, value.value);
     }
     getMaxHeight(): Value {
@@ -133,11 +133,11 @@ export class YogaNode extends Yoga$Node {
         return new Value(value.unit, value.value);
     }
     getOverflow(): Yoga$Direction {
-        return this.native.overflow;
+        return YGNodeStyleGetOverflow(this.native as any);
     }
     getPadding(edge: Yoga$Edge): Value {
-        const padding = this.native.padding;
-        return new Value(padding.unit, padding.value);
+        const value = YGNodeStyleGetPadding(this.native as any, edge);
+        return new Value(value.unit, value.value);
     }
     getParent(): YogaNode|undefined|null {
         const nativeParent: YGLayout|undefined|null = YGNodeGetParent(this.native as any) as unknown as YGLayout|undefined|null;
