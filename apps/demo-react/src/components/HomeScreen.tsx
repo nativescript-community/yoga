@@ -4,7 +4,6 @@ import { ListView, StyleSheet } from "react-nativescript";
 import { FrameNavigationProp } from "react-nativescript-navigation";
 import { MainStackParamList } from "./NavigationParamList";
 import type { ItemEventData } from "@nativescript/core";
-import { createStyleSheet } from "../util/createStyleSheet";
 
 type HomeScreenProps = {
     route: RouteProp<MainStackParamList, "home">,
@@ -17,8 +16,8 @@ interface MyItem {
 }
 const items: MyItem[] = [
     {
-        label: "expo-contacts",
-        route: "contacts",
+        label: "Basic tests",
+        route: "basic",
     },
 ];
 
