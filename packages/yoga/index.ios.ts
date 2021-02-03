@@ -6,12 +6,18 @@ import type { Yoga$Direction, Yoga$Align, Yoga$Edge, Yoga$Display, Yoga$FlexDire
 import CONSTANTS from './YGEnums';
 
 export class YogaNode extends Yoga$Node {
-    public readonly native: YGLayout = YGLayout.alloc().init();
+    /**
+     * Provisional solution for getting a reference to the YogaNode instance that owns the YGLayout native object.
+     * I'm still trying to understand the end-to-end picture for the memory management lifecycle.
+     */
+    private static readonly nativeToOwners = new WeakMap<YGLayout, YogaNode>();
     private static readonly notExposedMsg: string = "Method not implemented, as Yoga does not expose it to Obj-C.";
+    public readonly native: YGLayout = YGLayout.alloc().init();
+
     constructor(){
         super();
 
-        (this.native as any).owner = this;
+        YogaNode.nativeToOwners.set(this.native, this);
     }
 
     calculateLayout(width?: number, height?: number, direction?: Yoga$Direction): void {
@@ -46,11 +52,7 @@ export class YogaNode extends Yoga$Node {
         if(!nativeChild){
             return nativeChild as undefined|null;
         }
-        /*
-         * Alternatively, we could let the YogaNode keep track of its children itself, rather than asking YogaNode.native.
-         * However, YogaNode.native is ultimately the source of truth.
-         */
-        return (nativeChild as any).owner;
+        return YogaNode.nativeToOwners.get(nativeChild);
     }
     getChildCount(): number {
         return YGNodeGetChildCount(this.native as any);
@@ -142,11 +144,7 @@ export class YogaNode extends Yoga$Node {
         if(!nativeParent){
             return nativeParent as undefined|null;
         }
-        /*
-         * Alternatively, we could let the YogaNode keep track of its parentage itself, rather than asking YogaNode.native.
-         * However, YogaNode.native is ultimately the source of truth.
-         */
-        return (nativeParent as any).owner;
+        return YogaNode.nativeToOwners.get(nativeParent);
     }
     getPosition(edge: Yoga$Edge): Value {
         const value: YGValue = YGNodeStyleGetPosition(this.native as any, edge);
